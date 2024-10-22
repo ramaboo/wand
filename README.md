@@ -1,1 +1,1 @@
-# wand
+# Magic Wand Project

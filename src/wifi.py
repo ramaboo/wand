@@ -13,9 +13,9 @@ class WiFi:
             sta_if.connect(self.ssid, self.password)
             while not sta_if.isconnected():
                 pass
-        print('IP: ', sta_if.ipconfig('addr4'))
+        print('IP: ', sta_if.ipconfig('addr4')[0])
 
     def disconnect(self):
-        print("Disconnecting ...")
+        print("Disconnecting from network...")
         sta_if = network.WLAN(network.WLAN.IF_STA)
         sta_if.disconnect()

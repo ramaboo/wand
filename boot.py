@@ -1,1 +1,5 @@
-# boot.py -- run on boot-up
+import sys
+
+print('Booting...')
+
+sys.path.append('/src')

@@ -1,7 +1,13 @@
 import network
 
 class WiFi:
-    def __init__(self, ssid, password):
+    WIFI_SSID = '8bitbunny'
+    WIFI_PASSWORD = 'ass4trash'
+    
+    # WIFI_SSID = 'PIZZAGATE'
+    # WIFI_PASSWORD = 'makeartnotwar'
+
+    def __init__(self, ssid=WIFI_SSID, password=WIFI_PASSWORD):
         self.ssid = ssid
         self.password = password
 
@@ -16,6 +22,6 @@ class WiFi:
         print('IP: ', sta_if.ipconfig('addr4')[0])
 
     def disconnect(self):
-        print("Disconnecting from network...")
+        print('Disconnecting from network...')
         sta_if = network.WLAN(network.WLAN.IF_STA)
         sta_if.disconnect()

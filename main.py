@@ -1,27 +1,19 @@
 import time
+import uasyncio as asyncio
 
-from screen import Screen
-from joystick import Joystick
-from steering import Steering
-from system import System
-from wifi import WiFi
-from led import LED
+from application import Application
 
-WIFI_SSID = '8bitbunny'
-WIFI_PASSWORD = 'ass4trash'
+HEARTBEAT = 100
 
-print('Looping...')
+async def main():
+    app = Application()
+    
+    while True:
+        await asyncio.sleep_ms(HEARTBEAT)
 
-wifi = WiFi(WIFI_SSID, WIFI_PASSWORD)
-system = System()
-screen = Screen()
-led = LED()
-
-while True:
-
-    led.red()
-
-    screen.lcd.clear()
-
-    screen.lcd.print(str(time.ticks_ms()))
-    time.sleep(0.25)
+try:
+   asyncio.run(main())
+finally:
+   asyncio.new_event_loop()
+   
+   

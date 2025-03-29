@@ -1,11 +1,11 @@
-from neopixel import NeoPixel
 from machine import Pin
-
-RGB_LED_PIN = 18
+from neopixel import NeoPixel
 
 class LED:
+    RGB_LED_PIN = 18 # Builtin
+
     def __init__(self):
-        pin = Pin(RGB_LED_PIN, Pin.OUT)
+        pin = Pin(self.RGB_LED_PIN, Pin.OUT)
         self.pixel = NeoPixel(pin, 1)
         self.pixel[0] = (0, 0, 0)
         self.pixel.write()

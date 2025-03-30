@@ -1,11 +1,11 @@
 import network
 
 class WiFi:
-    WIFI_SSID = '8bitbunny'
-    WIFI_PASSWORD = 'ass4trash'
+    #WIFI_SSID = '8bitbunny'
+    #WIFI_PASSWORD = 'ass4trash'
     
-    # WIFI_SSID = 'PIZZAGATE'
-    # WIFI_PASSWORD = 'makeartnotwar'
+    WIFI_SSID = 'PIZZAGATE'
+    WIFI_PASSWORD = 'makeartnotwar'
 
     def __init__(self, ssid=WIFI_SSID, password=WIFI_PASSWORD):
         self.ssid = ssid

@@ -13,9 +13,7 @@ class RotarySteering(Range):
     TIMER_ID = 0
     TIMER_FREQUENCY = 100
     
-    def __init__(self):
-        
-        self.rotary_last_position = 0
+    def __init__(self):        
         self.rotary_position = 0
         
         self.stepper_position = 0
@@ -26,7 +24,7 @@ class RotarySteering(Range):
             max_val=99,
             pull_up=True,
             reverse=False, 
-            range_mode=RotaryIRQ.RANGE_WRAP)
+            range_mode=RotaryIRQ.RANGE_UNBOUNDED)
         
         self.rotary_event = asyncio.Event()
         self.r1.add_listener(self.rotary_callback)
@@ -46,18 +44,18 @@ class RotarySteering(Range):
             return
   
         if self.rotary_position > self.stepper_position:
-            self.stepper.right()
-            self.stepper.step()
+            self.app.stepper.right()
+            self.app.stepper.safe_step()
             self.stepper_position += 1
             
         elif self.rotary_position < self.stepper_position:
-            self.stepper.left()
-            self.stepper.step()
+            self.app.stepper.left()
+            self.app.stepper.safe_step()
             self.stepper_position -= 1
 
-    def setup(self, app):
-        self.stepper = app.stepper
-        self.stepper.enable()
+    def start(self, app):
+        self.app = app
+        self.app.stepper.enable()
         asyncio.create_task(self.rotary_action())
         
         self.start_timer()
@@ -69,19 +67,7 @@ class RotarySteering(Range):
         while True:
             await self.rotary_event.wait()
             
-            self.update_position(self.r1.value())
+            self.rotary_position = self.r1.value()
             
             self.rotary_event.clear()
 
-    def update_position(self, new_position):        
-        if self.rotary_last_position == 0 and new_position == 99:
-            self.rotary_position -= 1
-        elif self.rotary_last_position == 99 and new_position == 0:
-            self.rotary_position += 1
-        elif self.rotary_last_position > new_position:
-            self.rotary_position -= 1
-        elif self.rotary_last_position < new_position:
-            self.rotary_position += 1
-
-        self.rotary_last_position = new_position
-        return self.rotary_position

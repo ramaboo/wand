@@ -2,7 +2,7 @@ from machine import Pin
 from neopixel import NeoPixel
 
 class LED:
-    RGB_LED_PIN = 18 # Builtin
+    RGB_LED_PIN = 48 # Builtin
 
     def __init__(self):
         pin = Pin(self.RGB_LED_PIN, Pin.OUT)

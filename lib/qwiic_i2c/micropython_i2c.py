@@ -32,6 +32,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
+from machine import SoftI2C, Pin
 
 from .i2c_driver import I2CDriver
 
@@ -41,35 +42,8 @@ _PLATFORM_NAME = "MicroPython"
 
 # used internally in this file to get i2c class object 
 def _connectToI2CBus(sda=None, scl=None, freq=100000, *args, **argk):
-	try:
-		from machine import I2C, Pin
-		if sys.platform == 'rp2':
-			if sda is not None and scl is not None:
-				# I2C busses follow every other pair of pins
-				scl_id = (scl // 2) % 2
-				sda_id = (sda // 2) % 2
-				# Check if both pins are on the same bus
-				if scl_id != sda_id:
-					raise Exception("I2C SCL and SDA pins must be on same ports")
-				return I2C(id=scl_id, scl=Pin(scl), sda=Pin(sda), freq=freq)
-			else:
-				return I2C()
-		elif 'xbee' in sys.platform:
-			return I2C(id=1, freq=freq)
-		elif 'esp32' in sys.platform:
-			if sda is not None and scl is not None:
-				return I2C(scl=Pin(scl), sda=Pin(sda), freq=freq)
-			else:
-				return I2C()
-		elif 'mimxrt' in sys.platform:
-			# Default freq for mimxrt (400k) is too fast for some devices, so we pass freq in
-			return I2C(id=0, freq=freq) # TODO: We can remove the id=0 argument once the MicroPython PR #16956 is merged
-		else:
-			raise Exception("Unknown MicroPython platform: " + sys.platform)
-	except Exception as e:
-		print(str(e))
-		print('error: failed to connect to i2c bus')
-	return None
+    return SoftI2C(scl=Pin(36), sda=Pin(35))
+
 
 def _connect_to_i2c_bus(*args, **argk):
 	return _connectToI2CBus(*args, **argk)

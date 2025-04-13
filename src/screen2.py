@@ -1,31 +1,29 @@
 import time
-import sys
 import uasyncio as asyncio
-import qwiic_serlcd
-from qwiic_i2c.micropython_i2c import MicroPythonI2C
 
 from machine import I2C, Pin
+from lcd_i2c import LCD
 from rotary import RotaryIRQ
+
 
 from cycle import Cycle
 
 class Screen:
-    I2C_ADDRESS = 0x72
-    I2C_SCL_PIN = 21
-    I2C_SDA_PIN = 20
-    
+    I2C_ADDRESS = 0x27
+    I2C_SCL_PIN = 13
+    I2C_SDA_PIN = 12
     NUM_ROWS = 4
     NUM_COLS = 20
-
-    REFRESH = 5000
+    LCD_FREQUENCY = 800000
+    REFRESH = 50
     
     R1_CLK = 35
     R1_DT = 36
     R1_SW = 37
 
     def __init__(self):
-        i2c = MicroPythonI2C(scl=Pin(self.I2C_SCL_PIN), sda=Pin(self.I2C_SDA_PIN))
-        self.lcd = qwiic_serlcd.QwiicSerlcd(address=self.I2C_ADDRESS, i2c_driver=i2c)
+        i2c = I2C(0, scl=Pin(self.I2C_SCL_PIN), sda=Pin(self.I2C_SDA_PIN), freq=self.LCD_FREQUENCY)
+        self.lcd = LCD(addr=self.I2C_ADDRESS, cols=self.NUM_COLS, rows=self.NUM_ROWS, i2c=i2c)
 
         self.r1 = RotaryIRQ(pin_num_clk=self.R1_DT, 
             pin_num_dt=self.R1_CLK, 
@@ -51,36 +49,36 @@ class Screen:
         self.render_screen()
 
         asyncio.create_task(self.rotary_action())
-        asyncio.create_task(self.refresh_action())
+        #asyncio.create_task(self.refresh_action())
 
-    async def render_screen(self):
+    def render_screen(self):
         current_item = self.screens.current_item()
         method = getattr(self, f'render_{current_item}')
         method()
        
     def render_home(self):
         #self.lcd.clear()
-        self.lcd.setCursor(col=0, row=0)
+        self.lcd.set_cursor(col=0, row=0)
         self.lcd.print('8-bit Bunny Home    ')
         
     def render_drive(self):
         #self.lcd.clear()
-        self.lcd.setCursor(col=0, row=0)
+        self.lcd.set_cursor(col=0, row=0)
 
         self.lcd.print('8-bit Bunny Drive   ')
-        self.lcd.setCursor(col=0, row=1)
+        self.lcd.set_cursor(col=0, row=1)
         rp = str(self.app.rotary_steering.rotary_position)
         self.lcd.print(f'RP: {rp}')
         
     def render_wand(self):
         #self.lcd.clear()
-        self.lcd.setCursor(col=0, row=0)
+        self.lcd.set_cursor(col=0, row=0)
 
         self.lcd.print('8-bit Bunny Wand     ')
         
     def render_system(self):
         #self.lcd.clear()
-        self.lcd.setCursor(col=0, row=0)
+        self.lcd.set_cursor(col=0, row=0)
 
         self.lcd.print('8-bit Bunny System  ')
         

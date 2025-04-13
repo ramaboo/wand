@@ -5,7 +5,7 @@ import uasyncio as asyncio
 
 class Stepper:
     STEP_PIN = 18
-    DIRECTION_PIN = 17
+    DIRECTION_PIN = 15
     ENABLED_PIN = 16
     
     LEFT_LIMIT_PIN = 9

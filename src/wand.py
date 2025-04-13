@@ -1,7 +1,7 @@
 import time
 import uasyncio as asyncio
 
-from machine import ADC, Pin
+from machine import ADC, Pin, DAC
 from range import Range
 
 class Wand(Range):
@@ -35,7 +35,7 @@ class Wand(Range):
     async def read_action(self):
         while True:
             self.read()
-            self.print()
+            # self.print()
                         
             await asyncio.sleep_ms(self.HEARTBEAT)
             

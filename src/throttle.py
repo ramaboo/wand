@@ -26,7 +26,11 @@ class Throttle(Range):
         while True:
             self.read()
             # self.print()
-            self.app.segment.set_value(self.throttle)   
+            self.app.segment.set_value(self.throttle)
+            
+            if self.throttle > 0:
+                self.app.stepper.enable()
+                self.app.timeout.control_input = time.ticks_ms()
             await asyncio.sleep_ms(self.HEARTBEAT)
     
     def read(self):

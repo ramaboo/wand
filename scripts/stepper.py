@@ -12,4 +12,4 @@ s.start()
 while True:
     s.right()
     s.step()
-    time.sleep_ms(10)
+    time.sleep_ms(2)

@@ -2,8 +2,8 @@ from machine import SoftI2C, Pin
 from ht16k33 import HT16K33Segment
 
 class Segment:
-    I2C_SCL_PIN = 34
-    I2C_SDA_PIN = 33
+    I2C_SCL_PIN = 20
+    I2C_SDA_PIN = 19
     I2C_ADDRESS = 0x70
     LED_BRIGHTNESS = 8 # 0-15
     

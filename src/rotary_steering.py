@@ -10,6 +10,7 @@ from led import LED
 class RotarySteering(Range):
     R1_CLK = 38
     R1_DT = 39
+    
     TIMER_ID = 0
     TIMER_FREQUENCY = 100
     
@@ -44,11 +45,13 @@ class RotarySteering(Range):
             return
   
         if self.rotary_position > self.stepper_position:
+            self.app.stepper.enable()
             self.app.stepper.right()
             self.app.stepper.safe_step()
             self.stepper_position += 1
             
         elif self.rotary_position < self.stepper_position:
+            self.app.stepper.enable()
             self.app.stepper.left()
             self.app.stepper.safe_step()
             self.stepper_position -= 1
@@ -68,6 +71,7 @@ class RotarySteering(Range):
             await self.rotary_event.wait()
             
             self.rotary_position = self.r1.value()
+            self.app.timeout.control_input = time.ticks_ms()
             
             self.rotary_event.clear()
 
